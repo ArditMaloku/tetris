@@ -1,0 +1,24 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "tetris",
+  "main": "js/node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ArditMaloku/tetris.git"
+  },
+  "author": "Ardit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ArditMaloku/tetris/issues"
+  },
+  "homepage": "https://gitlab.com/ArditMaloku/tetris#readme",
+  "dependencies": {
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

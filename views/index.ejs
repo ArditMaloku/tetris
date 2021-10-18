@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="shortcut icon" href="http://localhost/tetris/images/favicon.png" type="image/x-icon">
+  <title>Tetris</title>
+  <style>
+    body{
+      height: 100vh;
+      background: darkslategray!important;
+      overflow: hidden;
+    }
+
+    .grid {
+      width: 200px;
+      height: 400px;
+      display: flex;
+      flex-wrap: wrap;
+      background-color: aliceblue;
+    }
+
+    .grid div {
+      height: 20px;
+      width: 20px;
+    }
+
+    .tetromino {
+      background-color: blue;
+    }
+
+    .mini-grid {
+      margin-left: 50px;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      flex-wrap: wrap;
+      background-color: aliceblue;
+    }
+
+    .mini-grid div {
+      height: 20px;
+      width: 20px;
+    }
+
+    h3, h4{
+      color: #fff!important;
+    }
+
+    .gold{
+      color: #FFD700;
+    }
+
+    .modal-header{
+      align-self: center!important;
+    }
+
+    .modal-content{
+      background: chocolate!important;
+    }
+
+    .modal-dialog{
+      top: 25%;
+    }
+
+    .bg {
+      height: 100%;
+      z-index: -1;
+      transition: 850ms;
+    }
+
+    .closeBlinds {
+      width: 160px;
+      height: 50px;
+      position: absolute;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Dancing Script', cursive;
+      font-size: 25px;
+      color: #fff;
+      cursor: pointer;
+      background-color: #63a4ff;
+      background-image: linear-gradient(315deg, #63a4ff 0%, #83eaf1 74%);
+      z-index: 9999999!important;  
+      right: 10px;
+      top:5px;
+    }
+
+    .btn{
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Dancing Script', cursive;
+      color: #fff;
+    }
+
+    .blind {
+      position: absolute;
+      width: 10px;
+      height: 0px;
+      background-color: #ffffff;
+      background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+      top: 0;
+    }
+
+    .string {
+      width: 5px;
+      height: 80px;
+      border-radius: 0 5px 0 0;
+      background: #eee;
+      position: absolute;
+      right: -5px;
+      top: 0;
+      transition: 850ms;
+    }
+
+    .string-end {
+      width: 8px;
+      height: 12px;
+      border-radius: 0 0 10px 10px;
+      background: #ccc;
+      position: absolute;
+      right: -6.5px;
+      bottom: -42px;
+      transition: 850ms;
+    }
+
+    .blindOn {
+      height: 50px;
+    }
+
+    .bgOn {
+      filter: invert(100%) brightness(100%);
+    }
+
+    .stringOn {
+      height: 60px;
+    }
+
+    .string-endOn {
+      bottom: -22px;
+    }
+
+    .noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+
+    #b1 {
+      left: 0;
+      transition: 100ms;
+    }
+
+    #b2 {
+      left: 10px;
+      transition: 150ms;
+    }
+
+    #b3 {
+      left: 20px;
+      transition: 200ms;
+    }
+
+    #b4 {
+      left: 30px;
+      transition: 250ms;
+    }
+
+    #b5 {
+      left: 40px;
+      transition: 300ms;
+    }
+
+    #b6 {
+      left: 50px;
+      transition: 350ms;
+    }
+
+    #b7 {
+      left: 60px;
+      transition: 400ms;
+    }
+
+    #b8 {
+      left: 70px;
+      transition: 450ms;
+    }
+
+    #b9 {
+      left: 80px;
+      transition: 500ms;
+    }
+
+    #b10 {
+      left: 90px;
+      transition: 550ms;
+    }
+
+    #b11 {
+      left: 100px;
+      transition: 600ms;
+    }
+
+    #b12 {
+      left: 110px;
+      transition: 650ms;
+    }
+
+    #b13 {
+      left: 120px;
+      transition: 700ms;
+    }
+
+    #b14 {
+      left: 130px;
+      transition: 750ms;
+    }
+
+    #b15 {
+      left: 140px;
+      transition: 800ms;
+    }
+
+    #b16 {
+      left: 150px;
+      transition: 850ms;
+    }
+
+    .pause{
+      background: #000;
+    }
+
+    #userOnline{
+      float: left;
+      color: #fff;
+    }
+
+    .bLogin{
+      text-decoration: underline;
+      cursor: pointer
+    }
+
+    #chatForm { 
+      background: #fff; 
+      padding: 3px;  
+      margin-top: 5px;
+      bottom: 0; 
+      width: 100%; 
+      border-color: #000; 
+      border-top-style: solid; 
+      border-top-width: 1px;
+    }
+    #chatForm input { 
+      border-style: solid; 
+      border-width: 1px; 
+      padding: 10px; 
+      width: 76%;  
+    }
+    #chatForm button { 
+      width: 22%; 
+      background: rgb(130, 224, 255); 
+      border: none; 
+      padding: 10px; 
+      margin-left: 2%; 
+    }
+    #messages { 
+      background: #fff;
+      list-style-type: none; 
+      margin: 0; 
+      padding: 0; 
+    }
+    #messages li { 
+      padding: 5px 10px; 
+    }
+    #messages li:nth-child(odd) { 
+      background: #eee; 
+    }
+    .messagesDiv{
+      position: absolute;
+      width: 100%;
+      z-index: 999999;
+    }
+    .messagesDiv div:first-child{
+      overflow-y: scroll;
+      height: 100%;
+      max-height: 70vh;
+    }
+    .col-3{
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="bg">
+  <div class="messagesDiv">
+      <div class="col-3">
+        <ul id="messages"></ul>
+      </div>
+      <div class="col-3 mb-1">
+        <form action="/" method="POST" id="chatForm">
+          <input id="txt" autocomplete="off" autofocus="on" placeholder="type your message here..." /><button class="btn sendBtn">Send</button>
+        </form>
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary" id="toggleChat">Hide Chat</button>
+      </div>
+      <div class="col-3">
+        <h4>Bestest Score: <span id="bestestScore" class="gold"></span></h4>
+      </div>
+  </div>
+
+  <div class="closeBlinds">
+    <span class="noselect">Close the blinds</span>
+    <div class="string"></div>
+    <div class="string-end"></div>
+    <div class="blind" id="b1"></div>
+    <div class="blind" id="b2"></div>
+    <div class="blind" id="b3"></div>
+    <div class="blind" id="b4"></div>
+    <div class="blind" id="b5"></div>
+    <div class="blind" id="b6"></div>
+    <div class="blind" id="b7"></div>
+    <div class="blind" id="b8"></div>
+    <div class="blind" id="b9"></div>
+    <div class="blind" id="b10"></div>
+    <div class="blind" id="b11"></div>
+    <div class="blind" id="b12"></div>
+    <div class="blind" id="b13"></div>
+    <div class="blind" id="b14"></div>
+    <div class="blind" id="b15"></div>
+    <div class="blind" id="b16"></div>
+  </div>
+  
+  <!-- Start Game Modal -->
+  <div class="modal fade" id="startGameModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title gold h4-start-game">Welcome! <a data-toggle="modal" id="#loginModal" data-target="#loginModal"><b class="bLogin">Login</b></a> to your Account or as a <a id="guest"><b class="bLogin">Guest</b></a>.</h4>
+          <i class="fas fa-sign-in-alt"></i>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body text-center gold">
+          <b>Turn up the Volume for better experience!</b>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of Start Game Modal -->
+  
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="loginForm">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title gold h4-start-game">Don't have an account? Check this to register <i class="fa fa-arrow-right"></i> <input type="checkbox" id="register" name="register" value="1"></h4>
+          </div>
+          
+          <!-- Modal body -->
+          <div class="modal-body text-center gold">
+              <div class="form-group">
+                <label>Email address</label>
+                <input type="email" required class="form-control" id="email" name="email" placeholder="Enter email">
+            </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" required class="form-control" id="password" name="password" placeholder="Password">
+              </div>
+              <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- End of Login Modal -->
+
+  <div class="row mb-5">
+    <div class="col-md-12 text-center">
+      <h3>Score: <span id="score" class="gold">0</span></h3>
+      <h3>Your Best Score: <span id="bestScore" class="gold">0</span></h3>
+    </div>
+  </div>
+  
+  <div class="row mb-5">
+    <div class="col-md-12 d-flex justify-content-center">
+      <div class="grid">
+      </div>
+
+      <div class="mini-grid">
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pause">
+    <div class="col-md-12">
+      <h5 class="text-center gold">Press Ctrl+P to pause the game</h5>
+    </div>
+  </div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="../../socket.io/socket.io.js"></script>
+<script src="http://localhost/tetris/js/index.js" charset="utf-8"></script>
+</html>
+<script>
+    for(var i=0;i<200;i++)
+      $('.grid').append('<div></div>')
+
+    for(var i=0;i<10;i++)
+      $('.grid').append('<div class="taken"></div>')
+
+    for(var i=0;i<16;i++)
+      $('.mini-grid').append('<div></div>')
+  </script>
+  </body>
+</html>
